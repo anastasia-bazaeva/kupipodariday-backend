@@ -39,10 +39,8 @@ export class Wishlist {
 
   @ManyToMany(() => Wish)
   @JoinTable()
-  items: Array<Wish>;
+  public items: Array<Wish>;
 
   @ManyToOne(() => User, (user) => user.wishlist)
   owner: User;
-
-  //Сущность закончена
 }

@@ -13,8 +13,6 @@ export class WishesService {
   constructor(
     @InjectRepository(Wish)
     private wishRepo: Repository<Wish>,
-    @InjectRepository(User)
-    private userRepo: Repository<User>,
   ) {}
   create(user: User, createWishDto: CreateWishDto) {
     const wish = this.wishRepo.save({
