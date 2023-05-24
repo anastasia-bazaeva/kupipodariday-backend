@@ -1,8 +1,12 @@
 import { IsString, Length, IsNotEmpty, IsEmail } from 'class-validator';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
+import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -47,5 +51,14 @@ export class User {
   @IsString()
   password: string;
 
-  //дописать связи после того, как добавлю желания, предложения и вишлисты
+  @OneToMany(() => Wish, (wish) => wish.owner)
+  wishes: Array<Wish>;
+
+  @OneToMany(() => Wishlist, (Wishlist) => Wishlist.owner)
+  wishlist: Array<Wishlist>;
+
+  @OneToMany(() => Offer, (offer) => offer.user)
+  offers: Array<Offer>;
+
+  //закончено
 }

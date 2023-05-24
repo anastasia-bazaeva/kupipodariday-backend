@@ -1,4 +1,5 @@
 import { IsString, Length, IsNotEmpty, IsUrl } from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import {
   Entity,
@@ -8,6 +9,7 @@ import {
   Column,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -37,8 +39,10 @@ export class Wishlist {
 
   @ManyToMany(() => Wish)
   @JoinTable()
-  @Column()
   items: Array<Wish>;
+
+  @ManyToOne(() => User, (user) => user.wishlist)
+  owner: User;
 
   //Сущность закончена
 }

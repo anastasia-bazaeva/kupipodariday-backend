@@ -21,12 +21,10 @@ export class Offer {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.id)
-  @Column()
+  @ManyToOne(() => User, (user) => user.offers)
   user: User;
 
   @ManyToOne(() => Wish, (wish) => wish.link)
-  @Column()
   item: Wish;
 
   @Column({
@@ -43,5 +41,5 @@ export class Offer {
   })
   hidden: boolean;
 
-  //сущность готова
+  //сущность закончена
 }

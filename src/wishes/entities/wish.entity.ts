@@ -1,10 +1,14 @@
 import { IsString, Length, IsNotEmpty, IsUrl, IsInt } from 'class-validator';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   Column,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -62,6 +66,10 @@ export class Wish {
   })
   copied: number;
 
-  //owner - юзер, который создал
-  //copied - много юзеров, которые добавили себе в вишлист
+  @ManyToOne(() => User, (user) => user.wishes)
+  owner: User;
+
+  @OneToMany(() => Offer, (offer) => offer.item)
+  offers: Array<Offer>;
+  //Сущность заполнена
 }
