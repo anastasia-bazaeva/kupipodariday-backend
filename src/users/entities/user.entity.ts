@@ -59,6 +59,4 @@ export class User {
 
   @OneToMany(() => Offer, (offer) => offer.user)
   offers: Array<Offer>;
-
-  //закончено
 }

@@ -6,7 +6,6 @@ import { In, Repository } from 'typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { User } from 'src/users/entities/user.entity';
-import { WishesService } from 'src/wishes/wishes.service';
 import { NotFoundEception } from 'src/utils/not-found';
 import { Unauthorized } from 'src/utils/unauthorized';
 
@@ -75,7 +74,9 @@ export class WishlistsService {
       ...wishlist,
       name: updateWishlistDto.name,
       image: updateWishlistDto.image,
-      description: updateWishlistDto.description,
+      description: updateWishlistDto.description
+        ? updateWishlistDto.description
+        : wishlist.description,
       items: wishes.length === 0 ? wishlist.items : wishes,
     });
   }

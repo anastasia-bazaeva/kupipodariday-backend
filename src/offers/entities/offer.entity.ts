@@ -40,6 +40,4 @@ export class Offer {
     default: false,
   })
   hidden: boolean;
-
-  //сущность закончена
 }
