@@ -104,4 +104,14 @@ export class WishesService {
       },
     });
   }
+
+  public findWishesById(id: number) {
+    this.wishRepo.find({
+      where: {
+        owner: {
+          id: id,
+        },
+      },
+    });
+  }
 }
