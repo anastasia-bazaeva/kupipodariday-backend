@@ -7,6 +7,8 @@ import { NotFoundEception } from 'src/utils/not-found';
 import { WishesService } from 'src/wishes/wishes.service';
 import { BadRequestException } from 'src/utils/bad-request';
 import { FindUserDto } from './dto/find-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +17,12 @@ export class UsersService {
     private userRepo: Repository<User>,
     private wishesService: WishesService,
   ) {}
+
+  async createUser(createUserDto: CreateUserDto) {
+    const { password, ...result } = createUserDto;
+    const hash = await bcrypt.hash(password, 10);
+    return this.userRepo.save({ password: hash, ...result });
+  }
 
   findAll() {
     return this.userRepo.find();

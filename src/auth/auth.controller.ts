@@ -1,24 +1,33 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { SigninUserDto } from 'src/users/dto/signin-user.dto';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { BadRequestException } from 'src/utils/bad-request';
+import { LocalGuard } from './local.guard';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     @InjectRepository(User)
-    private userRepo: Repository<User>,
+    private userService: UsersService,
+    private authService: AuthService,
   ) {}
 
-  @Post('signup')
-  create(@Body() createUserDto: CreateUserDto) {
-    return 'Create';
+  @UseGuards(LocalGuard)
+  @Post('signin')
+  signin(@Req() req) {
+    return this.authService.auth(req.user);
   }
 
-  @Post('signin')
-  signin(@Body() signinUserDto: SigninUserDto) {
-    return 'signin';
+  @Post('signup')
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      const user = await this.userService.createUser(createUserDto);
+      return user;
+    } catch (err) {
+      return new BadRequestException();
+    }
   }
 }

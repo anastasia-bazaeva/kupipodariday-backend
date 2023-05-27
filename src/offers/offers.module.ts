@@ -4,10 +4,12 @@ import { OffersController } from './offers.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from './entities/offer.entity';
+import { JwtStrategy } from 'src/auth/jwt.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Offer, Wish])],
   controllers: [OffersController],
-  providers: [OffersService],
+  providers: [OffersService, JwtStrategy],
+  exports: [OffersService, Offer],
 })
 export class OffersModule {}
