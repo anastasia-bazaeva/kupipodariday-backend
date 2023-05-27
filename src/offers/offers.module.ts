@@ -9,7 +9,7 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
 @Module({
   imports: [TypeOrmModule.forFeature([Offer, Wish])],
   controllers: [OffersController],
-  providers: [OffersService, JwtStrategy],
-  exports: [OffersService, Offer],
+  providers: [OffersService],
+  exports: [OffersService],
 })
 export class OffersModule {}

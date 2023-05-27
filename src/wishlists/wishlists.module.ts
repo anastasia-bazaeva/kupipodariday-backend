@@ -9,7 +9,7 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
 @Module({
   imports: [TypeOrmModule.forFeature([Wish, Wishlist])],
   controllers: [WishlistsController],
-  providers: [WishlistsService, JwtStrategy],
-  exports: [WishlistsService, Wishlist],
+  providers: [WishlistsService],
+  exports: [WishlistsService],
 })
 export class WishlistsModule {}

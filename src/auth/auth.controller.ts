@@ -7,7 +7,7 @@ import { BadRequestException } from 'src/utils/bad-request';
 import { LocalGuard } from './local.guard';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     @InjectRepository(User)

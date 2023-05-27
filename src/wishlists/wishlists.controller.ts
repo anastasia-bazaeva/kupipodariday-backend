@@ -13,12 +13,13 @@ import { WishlistsService } from './wishlists.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { JwtGuard } from 'src/auth/guard';
+import { LocalGuard } from 'src/auth/local.guard';
 
 @Controller('wishlists')
 export class WishlistsController {
   constructor(private readonly wishlistsService: WishlistsService) {}
 
-  @UseGuards(JwtGuard)
+  @UseGuards(LocalGuard)
   @Post()
   create(@Req() req, @Body() createWishlistDto: CreateWishlistDto) {
     return this.wishlistsService.create(req.user, createWishlistDto);
@@ -34,7 +35,7 @@ export class WishlistsController {
     return this.wishlistsService.findOne(id);
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(LocalGuard)
   @Patch(':id')
   update(
     @Param('id') id: number,
@@ -44,7 +45,7 @@ export class WishlistsController {
     return this.wishlistsService.update(id, req.user, updateWishlistDto);
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(LocalGuard)
   @Delete(':id')
   remove(@Param('id') id: number, @Req() req) {
     return this.wishlistsService.remove(id, req.user);

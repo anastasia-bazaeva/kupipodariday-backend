@@ -5,11 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { WishesService } from 'src/wishes/wishes.service';
 import { JwtStrategy } from 'src/auth/jwt.strategy';
+import { Wish } from 'src/wishes/entities/wish.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), WishesService],
+  imports: [TypeOrmModule.forFeature([User, Wish])],
   controllers: [UsersController],
-  providers: [UsersService, JwtStrategy],
-  exports: [UsersService, User],
+  providers: [UsersService, ConfigService, WishesService],
+  exports: [UsersService],
 })
 export class UsersModule {}
