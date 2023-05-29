@@ -21,7 +21,8 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto) {
     const { password, ...result } = createUserDto;
     const hash = await bcrypt.hash(password, 10);
-    return this.userRepo.save({ password: hash, ...result });
+    const newUser = this.userRepo.create({ password: hash, ...result });
+    return this.userRepo.save(newUser);
   }
 
   findAll() {
