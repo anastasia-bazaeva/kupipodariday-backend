@@ -22,7 +22,7 @@ export class UsersService {
     const { password, ...result } = createUserDto;
     const hash = await bcrypt.hash(password, 10);
     const newUser = this.userRepo.create({ password: hash, ...result });
-    return this.userRepo.save(newUser);
+    return await this.userRepo.save(newUser);
   }
 
   findAll() {
