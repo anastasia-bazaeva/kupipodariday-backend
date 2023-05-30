@@ -25,8 +25,15 @@ export class OffersService {
         owner: true,
       },
     });
+
+    const updatedRaised = wish.offers
+      .map((offer) => offer.amount)
+      .reduce((acc, value) => acc + value, 0);
+    wish.raised = updatedRaised;
+
     if (!wish) throw new NotFoundEception();
     if (wish.owner.id === user.id) throw new BadRequestException();
+    if (wish.raised > wish.price) throw new BadRequestException();
     return this.offersRepo.save({
       ...createOfferDto,
       user: user,

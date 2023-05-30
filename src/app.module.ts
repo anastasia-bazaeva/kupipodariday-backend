@@ -16,7 +16,7 @@ import { AuthController } from './auth/auth.controller';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'localhost:8080',
       port: 5433,
       username: 'student',
       password: 'student',

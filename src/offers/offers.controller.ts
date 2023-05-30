@@ -10,9 +10,8 @@ import {
 import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { JwtGuard } from 'src/auth/guard';
-import { LocalGuard } from 'src/auth/local.guard';
 
-@UseGuards(LocalGuard)
+@UseGuards(JwtGuard)
 @Controller('offers')
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
