@@ -30,14 +30,4 @@ export class OffersController {
   findOne(@Param('id') id: number) {
     return this.offersService.findOne(id);
   }
-  // в ТЗ нет этих роутов и методов, наверное можно удалить?
-  // @Patch(':id')
-  // update(@Param('id') id: number, @Body() updateOfferDto: UpdateOfferDto) {
-  //   return this.offersService.update(id, updateOfferDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: number) {
-  //   return this.offersService.remove(id);
-  // }
 }

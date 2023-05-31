@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Repository } from 'typeorm';
 import { Wish } from './entities/wish.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { NotFoundEception } from 'src/utils/not-found';
-import { Unauthorized } from 'src/utils/unauthorized';
 
 @Injectable()
 export class WishesService {
@@ -41,22 +44,24 @@ export class WishesService {
   async update(id: number, user: number, updateWishDto: UpdateWishDto) {
     const existanceCheck = await this.findOne(id);
     if (!existanceCheck) {
-      throw new NotFoundEception();
+      throw new NotFoundException('Желание не найдено');
     } else if (existanceCheck.owner.id !== user) {
-      throw new Unauthorized();
+      throw new UnauthorizedException('Нельзя редактировать чужое желание');
     }
-    return this.wishRepo.save({
-      id: id,
-      ...updateWishDto,
-    });
+    if (updateWishDto.price && existanceCheck.raised > 0) {
+      throw new ForbiddenException(
+        'Вы не можете изменять стоимость подарка, если уже есть желающие скинуться',
+      );
+    }
+    return this.wishRepo.update({ id }, updateWishDto);
   }
 
   async remove(id: number, user: number) {
     const existanceCheck = await this.findOne(id);
     if (!existanceCheck) {
-      throw new NotFoundEception();
+      throw new NotFoundException('Желание не найдено');
     } else if (existanceCheck.owner.id !== user) {
-      throw new Unauthorized();
+      throw new UnauthorizedException('Нельзя удалить чужое желание');
     }
     return this.wishRepo.delete(id);
   }
@@ -64,9 +69,11 @@ export class WishesService {
   async copyWish(id: number, user: User) {
     const existanceCheck = await this.findOne(id);
     if (!existanceCheck) {
-      throw new NotFoundEception();
-    } else if (existanceCheck.owner.id !== user.id) {
-      throw new Unauthorized();
+      throw new NotFoundException('Желание не найдено');
+    } else if (existanceCheck.owner.id === user.id) {
+      throw new ForbiddenException(
+        'Нельзя скопировать к себе желание, которое у вас уже есть',
+      );
     }
     const copyWishDto = {
       name: existanceCheck.name,
