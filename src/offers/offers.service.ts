@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
-//import { UpdateOfferDto } from './dto/update-offer.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Offer } from './entities/offer.entity';
 import { Repository } from 'typeorm';
-import { NotFoundEception } from 'src/utils/not-found';
 import { Wish } from 'src/wishes/entities/wish.entity';
-import { BadRequestException } from 'src/utils/bad-request';
 
 @Injectable()
 export class OffersService {
@@ -31,9 +32,18 @@ export class OffersService {
       .reduce((acc, value) => acc + value, 0);
     wish.raised = updatedRaised;
 
-    if (!wish) throw new NotFoundEception();
-    if (wish.owner.id === user.id) throw new BadRequestException();
-    if (wish.raised > wish.price) throw new BadRequestException();
+    if (!wish) throw new NotFoundException('Желание не найдено');
+    if (wish.owner.id === user.id) {
+      throw new BadRequestException(
+        'Нельзя внести деньги на собственное желание',
+      );
+    }
+    if (wish.raised > wish.price)
+      throw new BadRequestException(
+        'Сумма взноса не может превышать сумму желания',
+      );
+
+    this.wishRepo.update({ id: wish.id }, wish);
     return this.offersRepo.save({
       ...createOfferDto,
       user: user,
@@ -66,15 +76,7 @@ export class OffersService {
         },
       },
     });
-    if (!offer) throw new NotFoundEception();
+    if (!offer) throw new NotFoundException('Предложение не найдено');
     return offer;
   }
-  // в ТЗ нет этих роутов и методов
-  // update(id: number, updateOfferDto: UpdateOfferDto) {
-  //   return `This action updates a #${id} offer`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} offer`;
-  // }
 }
